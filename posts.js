@@ -5,9 +5,9 @@ const Redis = require('ioredis')
 const dbConfig = {
   user: "sa",
   password: "admin@123",
-  server: "172.16.62.74",
+  server: "120.253.47.149",
   database: "StackOverflow",
-  port: 1433,
+  port: 9433,
   pool: {
       max: 1000,
       min: 0,
@@ -359,8 +359,8 @@ async function main() {
 
   let count = Math.floor(startAndEnd[2] / 4)
 
-  let startId = Number(startAndEnd[0]) + 3*count    // 区间起点
-  let endId = Number(startAndEnd[0]) +  4*count // 区间重点
+  let startId = Number(startAndEnd[0]) + 1*count    // 区间起点
+  let endId = Number(startAndEnd[0]) +  2*count // 区间重点
   let postId = await redis.get("postid") // 当前数据库末尾处
   let start
   if(postId < startId) {
