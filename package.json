@@ -1,0 +1,24 @@
+{
+  "name": "sqlpost",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "posts": "pm2 start posts.js -i 1 --name posts --restart-delay 10000",
+    "intervals": "pm2 start interval.js -i 1 --name intervals --restart-delay 5000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^10.0.0",
+    "elasticsearch": "^16.7.2",
+    "ioredis": "^4.6.2",
+    "mssql": "^7.1.0",
+    "node-schedule": "^2.0.0",
+    "pm2": "^4.5.6",
+    "tedious": "^11.0.8"
+  }
+}
