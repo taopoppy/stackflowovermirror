@@ -359,8 +359,8 @@ async function main() {
 
   let count = Math.floor(startAndEnd[2] / 4)
 
-  let startId = startAndEnd[0] + 1*count    // 区间起点
-  let endId = startAndEnd[1] +  2*count // 区间重点
+  let startId = startAndEnd[0] + 2*count    // 区间起点
+  let endId = startAndEnd[1] +  3*count // 区间重点
   let postId = await redis.get("postid") // 当前数据库末尾处
   let start
   if(postId < startId) {
