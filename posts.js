@@ -50,12 +50,17 @@ async function getCnBody(body) {
 	const queue = []
 	// 取出所有的pre标签内容
 	if(typeof body === "string") {
-    if(body.length > 5000) { return body }
+    if(body.length > 1000) { return body }
+    let n =0
 		while(
       (body.indexOf("<pre") !== -1 && body.indexOf("</pre>")!==-1) ||
       (body.indexOf("<code") !== -1 && body.indexOf("</code>")!==-1) ||
       (body.indexOf("<strong") !== -1 && body.indexOf("</strong>")!==-1)
     ) {
+      n++
+      if(n > 100) {
+        break
+      }
 			let codeStart = body.indexOf("<code")
       let preStart = body.indexOf("<pre")
       let strongStart = body.indexOf("<strong")
@@ -359,8 +364,8 @@ async function main() {
 
   let count = Math.floor(startAndEnd[2] / 4)
 
-  let startId = Number(startAndEnd[0]) + 3*count    // 区间起点
-  let endId = Number(startAndEnd[0]) +  4*count // 区间重点
+  let startId = Number(startAndEnd[0]) + 1*count    // 区间起点
+  let endId = Number(startAndEnd[0]) +  2*count // 区间重点
   let postId = await redis.get("postid") // 当前数据库末尾处
   let start
   if(postId < startId) {
@@ -371,15 +376,21 @@ async function main() {
   console.log(`区间${startId}-${endId},当前位置为：${start}`)
 
   let i = Number(start)+1
-  if(i > endId) {
-    console.log("程序到达终点，开始休息")
-    await global.redis.set("postrest", 1)
-    process.exit()
-  }
+
   setInterval(async ()=> {
+    if(i > endId) {
+      console.log("程序到达终点，开始休息")
+      await global.redis.set("postrest", 1)
+      process.exit()
+    }
     await upDateSql(i)
     i = i+1
-  }, 8000)
+    let isContinue = await redis.get("postrest")
+    if(Number(isContinue) === 1) {
+      console.log("post正在休息,循环结束")
+      process.exit()
+    }
+  }, 6000)
 
 }
 

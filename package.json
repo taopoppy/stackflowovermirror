@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "posts": "pm2 start posts.js -i 1 --name posts --restart-delay 10000",
+    "posts": "pm2 start posts.js -i 1 --name posts --restart-delay 5000",
     "intervals": "pm2 start interval.js -i 1 --name intervals --restart-delay 5000"
   },
   "keywords": [],

@@ -1,38 +1,11 @@
-const sql = require('mssql');
-const axios = require('axios')
 const schedule = require('node-schedule');
 const Redis = require('ioredis')
 
-// sqlserver数据库连接配置
-const dbConfig = {
-  user: "sa",
-  password: "admin@123",
-  server: "172.16.62.74",
-  database: "StackOverflow",
-  port: 1433,
-  pool: {
-      max: 1000,
-      min: 0,
-			acquireTimeoutMillis: 30000,
-  		idleTimeoutMillis: 30000,
-  },
-	options: {
-    encrypt: true, // for azure
-    trustServerCertificate: true, // change to true for local dev / self-signed certs,
-		requestTimeout:30000
-  }
-};
-
 async function main() {
-    // 连接sqlserver
-    let pool = await sql.connect(dbConfig)
-    global.sql = sql;
-    global.pool = pool
-
-      // 连接redis
+    // 连接redis
     const redis = new Redis({
-        port:'6379'
-        // password:123456
+      port:'6379'
+      // password:123456
     })
     global.redis = redis
 
@@ -44,11 +17,17 @@ async function main() {
 
     // 启动任务
     let job = schedule.scheduleJob(rule, async () => {
-			await global.redis.set("postrest", 0)
-			console.log("清除睡眠成功")
+      // 进入睡眠模式
+      await global.redis.set("postrest", 1)
+      console.log("进入睡眠")
+
+      let sleepEnd = setTimeout(async()=> {
+        await global.redis.set("postrest", 0)
+        console.log("清除睡眠")
+        clearTimeout(sleepEnd)
+      },5000)
     });
 }
-
 
 Date.prototype.Format = function (fmt) { //author: meizz
     var o = {
