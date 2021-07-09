@@ -1,11 +1,12 @@
 const sql = require('mssql');
 const axios = require('axios')
 const Redis = require('ioredis')
+const { server, apikey, key, user,password } = require('../config')
 // sqlserver数据库连接配置
 const dbConfig = {
-  user: "sa",
-  password: "admin@123",
-  server: "52.83.124.38",
+  user: user,
+  password: password,
+  server: server,
   database: "StackOverflow",
   port: 9433,
   pool: {
@@ -28,7 +29,7 @@ async function transCn(enTitle, postId){
     let transResult = await axios.post('https://free.niutrans.com/NiuTransServer/translation', {
       "from":"en",
       "to":"zh",
-      "apikey": "9731570c3736a668077b1d6f686df69a",
+      "apikey": apikey,
       "src_text": `${enTitle}`,
       "dictNo":"",
       "memoryNo":""
@@ -156,7 +157,7 @@ async function upDateSql(id){
     }
 
     // 1. 请求数据，判断post是回答还是问题
-    let post = await axios.get(`https://api.stackexchange.com/2.2/posts/${id}?key=05PRPnW)tB0oqblvcgxm4Q((&site=stackoverflow&filter=!SV_dAhTh6Fb9EDcR0b`)
+    let post = await axios.get(`https://api.stackexchange.com/2.2/posts/${id}?key=${key}&site=stackoverflow&filter=!SV_dAhTh6Fb9EDcR0b`)
     // if(post.status !== 200) {
     //   console.log(`${id}请求失败，退出程序`)
     //   process.exit()
@@ -172,7 +173,7 @@ async function upDateSql(id){
     console.log(`${id}是${isAnsOrQues}`)
     if(isAnsOrQues === "answer") {
       // 如果是回答
-      let request = await axios.get(`https://api.stackexchange.com/2.2/answers/${id}?key=05PRPnW)tB0oqblvcgxm4Q((&site=stackoverflow&filter=!B8mctJKbuuToAuP9JtN6caIKMW6QY5`)
+      let request = await axios.get(`https://api.stackexchange.com/2.2/answers/${id}?key=${key}&site=stackoverflow&filter=!B8mctJKbuuToAuP9JtN6caIKMW6QY5`)
       // if(request.status !== 200) {
       //   console.log(`${id}请求失败，退出程序`)
       //   process.exit()
@@ -247,7 +248,7 @@ async function upDateSql(id){
 
     } else if(isAnsOrQues === "question") {
       // 如果是问题
-      let request = await axios.get(`https://api.stackexchange.com/2.2/questions/${id}?key=05PRPnW)tB0oqblvcgxm4Q((&site=stackoverflow&filter=!7hCuYsHmSLMf93P4(y9JXCW6hVDzjT.Kqn`)
+      let request = await axios.get(`https://api.stackexchange.com/2.2/questions/${id}?key=${key}&site=stackoverflow&filter=!7hCuYsHmSLMf93P4(y9JXCW6hVDzjT.Kqn`)
       // if(request.status !== 200) {
       //   console.log(`${id}请求失败，退出程序`)
       //   process.exit()
@@ -364,8 +365,8 @@ async function main() {
 
   let count = Math.floor(startAndEnd[2] / 4)
 
-  let startId = Number(startAndEnd[0]) + 3*count    // 区间起点
-  let endId = Number(startAndEnd[0]) +  4*count // 区间重点
+  let startId = Number(startAndEnd[0]) + 1*count    // 区间起点
+  let endId = Number(startAndEnd[0]) +  2*count // 区间重点
   let postId = await redis.get("postid") // 当前数据库末尾处
   let start
   if(postId < startId) {
