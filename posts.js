@@ -6,7 +6,7 @@ const abiao_filter = require('abiao_filter')
 const dbConfig = {
   user: "sa",
   password: "admin@123",
-  server: "120.253.47.149",
+  server: "52.83.124.38",
   database: "StackOverflow",
   port: 9433,
   pool: {
@@ -375,8 +375,8 @@ async function main() {
 
   let count = Math.floor(startAndEnd[2] / 4)
 
-  let startId = Number(startAndEnd[0]) + 2*count    // 区间起点
-  let endId = Number(startAndEnd[0]) +  3*count // 区间重点
+  let startId = Number(startAndEnd[0]) + 3*count    // 区间起点
+  let endId = Number(startAndEnd[0]) +  4*count // 区间重点
   let postId = await redis.get("postid") // 当前数据库末尾处
   let start
   if(postId < startId) {
