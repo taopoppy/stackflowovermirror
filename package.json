@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "abiao_filter": "^0.2.8",
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "elasticsearch": "^16.7.2",
