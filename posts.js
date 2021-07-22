@@ -401,7 +401,7 @@ async function main() {
       console.log("post正在休息,循环结束")
       process.exit()
     }
-  }, 6000)
+  }, 8000)
 
 }
 
